@@ -8,13 +8,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@+id/updateProfileButton"
+        app:layout_constraintBottom_toTopOf="@+id/startButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/profileImage"
+            android:id="@+id/profileImageStart"
             android:layout_width="218dp"
             android:layout_height="218dp"
             android:layout_marginTop="100dp"
@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/nicknameFieldProfile"
+            android:id="@+id/nicknameFieldStart"
             android:layout_width="352dp"
             android:layout_height="54dp"
             android:layout_marginTop="39dp"
@@ -34,12 +34,12 @@
             android:inputType="textPersonName"
             android:textAlignment="center"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="@+id/profileImage"
-            app:layout_constraintStart_toStartOf="@+id/profileImage"
-            app:layout_constraintTop_toBottomOf="@+id/profileImage" />
+            app:layout_constraintEnd_toEndOf="@+id/profileImageStart"
+            app:layout_constraintStart_toStartOf="@+id/profileImageStart"
+            app:layout_constraintTop_toBottomOf="@+id/profileImageStart" />
 
         <EditText
-            android:id="@+id/whatIDoFieldProfile"
+            android:id="@+id/whatIDoFieldStart"
             android:layout_width="352dp"
             android:layout_height="54dp"
             android:layout_marginTop="15dp"
@@ -50,12 +50,12 @@
             android:shadowRadius="40"
             android:textAlignment="center"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="@+id/nicknameFieldProfile"
-            app:layout_constraintStart_toStartOf="@+id/nicknameFieldProfile"
-            app:layout_constraintTop_toBottomOf="@+id/nicknameFieldProfile" />
+            app:layout_constraintEnd_toEndOf="@+id/nicknameFieldStart"
+            app:layout_constraintStart_toStartOf="@+id/nicknameFieldStart"
+            app:layout_constraintTop_toBottomOf="@+id/nicknameFieldStart" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/updateProfileButton"
+            android:id="@+id/startButton"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="131dp"
             android:layout_height="wrap_content"
@@ -66,8 +66,8 @@
             android:textAllCaps="false"
             android:textSize="24sp"
             app:cornerRadius="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/whatIDoFieldProfile"
-            app:layout_constraintStart_toStartOf="@+id/whatIDoFieldProfile"
-            app:layout_constraintTop_toBottomOf="@+id/nicknameFieldProfile" />
+            app:layout_constraintEnd_toEndOf="@+id/whatIDoFieldStart"
+            app:layout_constraintStart_toStartOf="@+id/whatIDoFieldStart"
+            app:layout_constraintTop_toBottomOf="@+id/nicknameFieldStart" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
