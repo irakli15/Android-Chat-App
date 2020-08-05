@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@+id/startButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="278dp"
+            android:layout_height="278dp"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/icon_user_male"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/nicknameField"
+            android:layout_width="352dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="39dp"
+            android:background="@drawable/rounded_edittext"
+            android:ems="10"
+            android:hint="Enter your nickname"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView2"
+            app:layout_constraintStart_toStartOf="@+id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+        <EditText
+            android:id="@+id/whatIDoField"
+            android:layout_width="352dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="44dp"
+            android:background="@drawable/rounded_edittext"
+            android:ems="10"
+            android:hint="What I do"
+            android:inputType="textPersonName"
+            android:shadowRadius="40"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/nicknameField"
+            app:layout_constraintStart_toStartOf="@+id/nicknameField"
+            app:layout_constraintTop_toBottomOf="@+id/nicknameField" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/startButton"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="131dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="159dp"
+            android:backgroundTint="#ff5479f1"
+            android:text="Start"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="24sp"
+            app:cornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/whatIDoField"
+            app:layout_constraintStart_toStartOf="@+id/whatIDoField"
+            app:layout_constraintTop_toBottomOf="@+id/nicknameField" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
