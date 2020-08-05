@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/profileImage"
-            android:layout_width="218dp"
-            android:layout_height="218dp"
+            android:layout_width="204dp"
+            android:layout_height="204dp"
             android:layout_marginTop="100dp"
             android:src="@drawable/ic_user_male"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,7 @@
             android:id="@+id/nicknameFieldProfile"
             android:layout_width="352dp"
             android:layout_height="54dp"
-            android:layout_marginTop="39dp"
+            android:layout_marginTop="41dp"
             android:background="@drawable/rounded_edittext"
             android:ems="10"
             android:hint="Enter your nickname"
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="134dp"
             android:backgroundTint="#ff5479f1"
-            android:text="Start"
+            android:text="Update"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textSize="24sp"
