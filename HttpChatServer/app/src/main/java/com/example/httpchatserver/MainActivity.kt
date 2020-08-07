@@ -2,6 +2,7 @@ package com.example.httpchatserver
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import com.sun.net.httpserver.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
@@ -79,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             when (httpExchange!!.requestMethod) {
                 "GET" -> {
                     // Get all messages
-                    sendResponse(httpExchange, "Would be all messages stringified json")
+                    sendResponse(httpExchange, Gson().toJson(Message("hello")))
                 }
                 "POST" -> {
                     val inputStream = httpExchange.requestBody

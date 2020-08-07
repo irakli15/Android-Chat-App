@@ -37,21 +37,22 @@ class ChatHistoryFragment : Fragment() {
         }
 
 
-        val serverRestAPI: ServerRestAPI = getServiceApi("localhost:5000/")
-        serverRestAPI.getMessages("test").enqueue(object: Callback<Message>{
-            override fun onFailure(call: Call<Message>, t: Throwable) {
-                Log.d("response", "failed")
-            }
+        val serverRestAPI: ServerRestAPI = getServiceApi("http://10.0.2.2:5000/")
+        serverRestAPI.getMessages().enqueue(
+            object : Callback<Message> {
+                override fun onFailure(call: Call<Message>, t: Throwable) {
+                    Log.d("response", "${t.message}")
+                }
 
-            override fun onResponse(call: Call<Message>, response: Response<Message>) {
-                Log.d("response", "${response.body()?.messageText}" )
-            }
-        })
+                override fun onResponse(call: Call<Message>, response: Response<Message>) {
+                    Log.d("response", "${response.body()?.messageText}")
+                }
+            })
         // Inflate the layout for this fragment
         return view
     }
 
-    private inline fun getServiceApi(baseUrl: String): ServerRestAPI {
+    private fun getServiceApi(baseUrl: String): ServerRestAPI {
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
