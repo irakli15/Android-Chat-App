@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:fitsSystemWindows="true"/>-->
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="166dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/chat_collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start|center_vertical"
+            android:background="#80b5b6cb"
+            android:fitsSystemWindows="true"
+            app:collapsedTitleGravity="left"
+            app:expandedTitleGravity="left|center_vertical"
+            app:expandedTitleMarginBottom="51dp"
+            app:expandedTitleMarginTop="85dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@id/chat_toolbar">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/chat_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin">
+            </androidx.appcompat.widget.Toolbar>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    app:layout_collapseMode="pin"
+                    android:layout_marginTop="88dp"
+                    android:layout_marginEnd="39dp"
+                    android:background="@drawable/circle"
+                    app:cardCornerRadius="50dp">
+
+                    <ImageView
+                        android:id="@+id/chat_user_icon"
+                        android:layout_width="54dp"
+                        android:layout_height="54dp"
+                        android:cropToPadding="true"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/cropped" />
+                </androidx.cardview.widget.CardView>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
