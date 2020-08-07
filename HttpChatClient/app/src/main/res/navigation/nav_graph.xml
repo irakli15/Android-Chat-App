@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/chatHistoryFragment">
+
+    <fragment
+        android:id="@+id/chatHistoryFragment"
+        android:name="com.example.httpchatclient.chathistorypage.ChatHistoryFragment"
+        android:label="ChatHistoryFragment"
+        tools:layout="@layout/fragment_chat_history_page">
+        <action
+            android:id="@+id/action_chatHistoryFragment_to_chatPageFragment"
+            app:destination="@id/chatPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profilePageFragment"
+        android:name="com.example.httpchatclient.profilepage.ProfilePageFragment"
+        android:label="fragment_profile_page"
+        tools:layout="@layout/fragment_profile_page" >
+        <action
+            android:id="@+id/action_profilePageFragment_to_chatPageFragment"
+            app:destination="@id/chatPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatPageFragment"
+        android:name="com.example.httpchatclient.chatpage.ChatPageFragment"
+        android:label="fragment_chat_page"
+        tools:layout="@layout/fragment_chat_page" >
+        <action
+            android:id="@+id/action_chatPageFragment_to_profilePageFragment"
+            app:destination="@id/profilePageFragment" />
+        <action
+            android:id="@+id/action_chatPageFragment_to_chatHistoryFragment2"
+            app:destination="@id/chatHistoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/startPageFragment"
+        android:name="com.example.httpchatclient.startpage.StartPageFragment"
+        android:label="fragment_start_page"
+        tools:layout="@layout/fragment_start_page" >
+        <action
+            android:id="@+id/action_startPageFragment_to_chatHistoryFragment"
+            app:destination="@id/chatHistoryFragment" />
+    </fragment>
+</navigation>

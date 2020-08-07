@@ -2,4 +2,6 @@
     <string name="app_name">HttpChatClient</string>
     <string name="you_have_no_chat_history">You have no chat history</string>
     <string name="chatHistoryTitlebarText">Messages</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,9 +1,10 @@
-package com.example.httpchatclient
+package com.example.httpchatclient.chatpage
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.httpchatclient.R
 import kotlinx.android.synthetic.main.chat_sent.view.*
 
 class ChatRecyclerView() :
@@ -18,7 +19,11 @@ class ChatRecyclerView() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ChatMessage(
-            LayoutInflater.from(parent.context).inflate(R.layout.chat_sent, parent, false)
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.chat_sent,
+                parent,
+                false
+            )
         )
     }
 
