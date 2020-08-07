@@ -9,13 +9,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.chat_history_page)
+        setContentView(R.layout.fragment_chat_page)
 //        setSupportActionBar(chat_toolbar)
 //        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 //        supportActionBar!!.setDisplayShowTitleEnabled(false)
 //        chat_toolbar.title = "user name"
-//        initChatRecyclerVew()
-        initChatHistoryRecyclerVew()
+        initChatRecyclerVew()
+//        initChatHistoryRecyclerVew()
     }
 
     fun initChatHistoryRecyclerVew() {
