@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/chatHistoryFragment"
-        android:name="com.example.httpchatclient.chathistorypage.ChatHistoryFragment"
+        android:name="com.example.httpchatclient.chathistorypage.ChatHistoryPageFragment"
         android:label="ChatHistoryFragment"
         tools:layout="@layout/fragment_chat_history_page">
         <action

@@ -19,6 +19,7 @@ class ChatPageFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_chat_page, container, false)
         var viewManager = LinearLayoutManager(context)
+        viewManager.reverseLayout = true
         var viewAdapter = ChatRecyclerView()
 
         var recyclerView: RecyclerView = view.chatRecyclerView

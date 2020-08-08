@@ -2,9 +2,16 @@ package com.example.httpchatserver
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
+import com.example.httpchatserver.database.MessagesDatabase
+import com.example.httpchatserver.database.message.Message
+import com.example.httpchatserver.database.user.User
+import com.example.httpchatserver.database.user.UserDAO
 import com.google.gson.Gson
 import com.sun.net.httpserver.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
@@ -19,6 +26,17 @@ class MainActivity : AppCompatActivity() {
         val port = 5000
 
         startServer(port)
+
+        var database =
+            Room.databaseBuilder(applicationContext, MessagesDatabase::class.java, "messages.db")
+                .fallbackToDestructiveMigration()
+                .build()
+        var user = User(0, "irakli mghebrishvili", "what I do", "")
+        GlobalScope.launch {
+            database.getUserDAO().getAllUsers()
+//            database.getUserDAO().insertUser(user)
+
+        }
 
     }
 
@@ -80,7 +98,6 @@ class MainActivity : AppCompatActivity() {
             when (httpExchange!!.requestMethod) {
                 "GET" -> {
                     // Get all messages
-                    sendResponse(httpExchange, Gson().toJson(Message("hello")))
                 }
                 "POST" -> {
                     val inputStream = httpExchange.requestBody
