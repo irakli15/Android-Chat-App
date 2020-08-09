@@ -26,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/nicknameFieldProfile"
+            android:id="@+id/userNameFieldProfile"
             android:layout_width="352dp"
             android:layout_height="54dp"
             android:layout_marginTop="41dp"
@@ -52,9 +52,9 @@
             android:shadowRadius="40"
             android:textAlignment="center"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="@+id/nicknameFieldProfile"
-            app:layout_constraintStart_toStartOf="@+id/nicknameFieldProfile"
-            app:layout_constraintTop_toBottomOf="@+id/nicknameFieldProfile" />
+            app:layout_constraintEnd_toEndOf="@+id/userNameFieldProfile"
+            app:layout_constraintStart_toStartOf="@+id/userNameFieldProfile"
+            app:layout_constraintTop_toBottomOf="@+id/userNameFieldProfile" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/updateProfileButton"
@@ -70,6 +70,6 @@
             app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="@+id/whatIDoFieldProfile"
             app:layout_constraintStart_toStartOf="@+id/whatIDoFieldProfile"
-            app:layout_constraintTop_toBottomOf="@+id/nicknameFieldProfile" />
+            app:layout_constraintTop_toBottomOf="@+id/userNameFieldProfile" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

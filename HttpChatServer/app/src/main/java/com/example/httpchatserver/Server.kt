@@ -1,14 +1,22 @@
 package com.example.httpchatserver
 
+import android.app.Service
 import android.content.Intent
 import android.os.Bundle
+import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import com.example.httpchatserver.database.MessagesDatabase
 import com.example.httpchatserver.database.user.User
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpServer
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
@@ -16,27 +24,15 @@ import java.net.InetSocketAddress
 import java.util.*
 import java.util.concurrent.Executors
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        startService(Intent(this, Server::class.java))
-        finish()
-//        setContentView(R.layout.activity_main)
-//        val port = 5000
-//
-//        startServer(port)
-//
-//        var database =
-//            Room.databaseBuilder(applicationContext, MessagesDatabase::class.java, "messages.db")
-//                .fallbackToDestructiveMigration()
-//                .build()
-//        var user = User(0, "irakli mghebrishvili", "what I do", "")
-//        GlobalScope.launch {
-//            database.getUserDAO().getAllUsers()
-////            database.getUserDAO().insertUser(user)
-//
-//        }
-
+class Server : Service() {
+    lateinit var model: ServerContract.Model
+    override fun onCreate() {
+        val port = 5000
+        startServer(port)
+        model = ServerModelImpl(applicationContext)
+        GlobalScope.launch {
+            model.getAllUsers()
+        }
     }
 
 
@@ -68,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             mHttpServer!!.createContext("/getuser", getUserHandler)
 
             mHttpServer!!.start()//startServer server;
-            server_status.text = "server is running on port: {$port}"
+//            server_status.text = "server is running on port: {$port}"
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -120,14 +116,29 @@ class MainActivity : AppCompatActivity() {
 
     private val getUserHandler = HttpHandler { httpExchange ->
         when (httpExchange!!.requestMethod) {
-            "GET" -> {
-
-            }
             "POST" -> {
                 val jsonString = streamToString(httpExchange.requestBody)
-                Gson().fromJson(jsonString, User::class.java)
+                val user = Gson().fromJson(jsonString, User::class.java)
+
+                GlobalScope.launch {
+                    val userFromDatabase = model.getUserByUserName(user.userName)
+                    if (userFromDatabase == null) {
+                        user.id = model.insertUser(user).toInt()
+                        sendResponse(httpExchange, Gson().toJson(user as User))
+                    } else {
+                        sendResponse(
+                            httpExchange,
+                            Gson().toJson(userFromDatabase)
+                        )
+                    }
+                }
+
             }
         }
+    }
+
+    override fun onBind(p0: Intent?): IBinder? {
+        return null
     }
 
 }

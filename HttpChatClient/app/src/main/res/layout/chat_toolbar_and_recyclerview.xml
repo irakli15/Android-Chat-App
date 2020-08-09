@@ -24,7 +24,7 @@
             app:expandedTitleGravity="left|center_vertical"
             app:expandedTitleMarginBottom="51dp"
             app:expandedTitleMarginTop="85dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlways"
             app:toolbarId="@id/chat_toolbar">
 
             <androidx.appcompat.widget.Toolbar

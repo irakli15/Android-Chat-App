@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/chatHistoryFragment">
+    app:startDestination="@id/startPageFragment">
 
     <fragment
         android:id="@+id/chatHistoryFragment"
