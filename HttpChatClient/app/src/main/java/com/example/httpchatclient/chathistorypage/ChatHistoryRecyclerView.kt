@@ -1,5 +1,6 @@
 package com.example.httpchatclient.chathistorypage
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,6 @@ class ChatHistoryRecyclerView(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var clickListener = View.OnClickListener {
-        navController.navigate(R.id.action_chatHistoryFragment_to_chatPageFragment)
-    }
 
     inner class ChatHistoryEntry(private var view: View) :
         RecyclerView.ViewHolder(view) {
@@ -27,7 +25,13 @@ class ChatHistoryRecyclerView(
                 if (messageThread.participant1.id == currentUser.id) messageThread.participant2.userName else messageThread.participant1.userName
             view.historyDateTimeField.text = messageThread.lastMessage.sendTime.toString()
             view.lastMessageText.text = messageThread.lastMessage.messageText
-            view.setOnClickListener(clickListener)
+            view.setOnClickListener(View.OnClickListener {
+                val args = Bundle()
+                args.putParcelable("currentUser", currentUser)
+                args.putParcelable("messageThread", messageThread)
+                navController.navigate(R.id.action_chatHistoryFragment_to_chatPageFragment, args)
+            })
+            view.historyDateTimeField.text = if(messageThread.id == 0) "" else messageThread.lastMessage.sendTime.toString()
         }
     }
 

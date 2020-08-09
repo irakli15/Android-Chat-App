@@ -9,7 +9,7 @@
         android:id="@+id/chatHistoryFragment"
         android:name="com.example.httpchatclient.chathistorypage.ChatHistoryPageFragment"
         android:label="ChatHistoryFragment"
-        tools:layout="@layout/fragment_chat_history_page">
+        tools:layout="@layout/fragment_chat_history_toolbar">
         <action
             android:id="@+id/action_chatHistoryFragment_to_chatPageFragment"
             app:destination="@id/chatPageFragment" />

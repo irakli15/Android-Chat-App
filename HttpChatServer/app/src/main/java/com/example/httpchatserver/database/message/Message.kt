@@ -11,10 +11,13 @@ import java.util.*
 
 @Parcelize
 @Entity
-data class Message (
+data class Message(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
     var messageText: String,
     var sendTime: Date,
-    var messageThreadId: Int
+    var messageThreadId: Int,
+    var senderId: Int,
+    var receiverId: Int
+
 ) : Parcelable

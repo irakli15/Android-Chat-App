@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.httpchatclient.R
 import com.example.httpchatserver.database.messagethread.MessageThread
 import com.example.httpchatserver.database.user.User
-import kotlinx.android.synthetic.main.fragment_chat_history_page.*
 import kotlinx.android.synthetic.main.fragment_chat_history_page.view.*
+import kotlinx.android.synthetic.main.fragment_chat_history_toolbar.*
 import kotlinx.android.synthetic.main.searchbar.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
