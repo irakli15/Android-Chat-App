@@ -14,6 +14,7 @@ import com.example.httpchatserver.database.user.User
 import kotlinx.android.synthetic.main.fragment_start_page.*
 import kotlinx.android.synthetic.main.fragment_start_page.view.*
 
+
 class StartPageFragment : Fragment(), StartPageContract.View {
     private val presenter = StartPagePresenterImpl()
     private lateinit var sharedPref: SharedPreferences
@@ -28,7 +29,6 @@ class StartPageFragment : Fragment(), StartPageContract.View {
         if (savedUserName != null) {
             presenter.loadUser(savedUserName, onUserLoad)
         }
-
         view.startButton.setOnClickListener {
             val userName = userNameFieldStart.text.toString()
             val whatIDo = whatIDoFieldStart.text.toString()
@@ -61,5 +61,6 @@ class StartPageFragment : Fragment(), StartPageContract.View {
         args.putParcelable("user", it)
         findNavController().navigate(R.id.action_startPageFragment_to_chatHistoryFragment, args)
     }
+
 
 }

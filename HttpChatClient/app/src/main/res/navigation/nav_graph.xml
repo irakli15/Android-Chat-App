@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_chatHistoryFragment_to_chatPageFragment"
             app:destination="@id/chatPageFragment" />
+        <action
+            android:id="@+id/action_chatHistoryFragment_to_startPageFragment"
+            app:destination="@id/startPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/profilePageFragment"

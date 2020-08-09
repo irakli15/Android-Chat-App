@@ -2,19 +2,13 @@ package com.example.httpchatserver
 
 import android.app.Service
 import android.content.Intent
-import android.os.Bundle
 import android.os.IBinder
-import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import com.example.httpchatserver.database.MessagesDatabase
+import com.example.httpchatserver.database.messagethread.MessageThreadDTO
 import com.example.httpchatserver.database.user.User
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpServer
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -62,6 +56,7 @@ class Server : Service() {
             mHttpServer!!.createContext("/messages", messageHandler)
 
             mHttpServer!!.createContext("/getuser", getUserHandler)
+            mHttpServer!!.createContext("/getMessageThreadsByUser", getMessageThreadsByUser)
 
             mHttpServer!!.start()//startServer server;
 //            server_status.text = "server is running on port: {$port}"
@@ -133,6 +128,23 @@ class Server : Service() {
                     }
                 }
 
+            }
+        }
+    }
+
+    private val getMessageThreadsByUser = HttpHandler { httpExchange ->
+        when (httpExchange!!.requestMethod) {
+            "POST" -> {
+                val jsonString = streamToString(httpExchange.requestBody)
+                val user = Gson().fromJson(jsonString, User::class.java)
+
+                GlobalScope.launch {
+                    val messageThreads = model.getMessageThreadDTOsByUser(user.id)
+                    sendResponse(
+                        httpExchange,
+                        Gson().toJson(messageThreads)
+                    )
+                }
             }
         }
     }

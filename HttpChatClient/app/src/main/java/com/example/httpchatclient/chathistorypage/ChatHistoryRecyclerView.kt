@@ -6,21 +6,32 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.httpchatclient.R
+import com.example.httpchatserver.database.messagethread.MessageThread
+import com.example.httpchatserver.database.user.User
 import kotlinx.android.synthetic.main.chat_history_entry.view.*
 
-class ChatHistoryRecyclerView(val navController: NavController) :
+class ChatHistoryRecyclerView(
+    private val navController: NavController,
+    private val currentUser: User
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var clickListener  = View.OnClickListener {
+    private var clickListener = View.OnClickListener {
         navController.navigate(R.id.action_chatHistoryFragment_to_chatPageFragment)
     }
 
-    inner class ChatHistoryEntry(private var view: View) : RecyclerView.ViewHolder(view) {
-        fun fillValues() {
-            view.historyUserNameField.text = "user name"
-            view.setOnClickListener (clickListener)
+    inner class ChatHistoryEntry(private var view: View) :
+        RecyclerView.ViewHolder(view) {
+        fun fillValues(messageThread: MessageThread) {
+            view.historyUserNameField.text =
+                if (messageThread.participant1.id == currentUser.id) messageThread.participant2.userName else messageThread.participant1.userName
+            view.historyDateTimeField.text = messageThread.lastMessage.sendTime.toString()
+            view.lastMessageText.text = messageThread.lastMessage.messageText
+            view.setOnClickListener(clickListener)
         }
     }
+
+    private val entries: MutableList<MessageThread> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ChatHistoryEntry(
@@ -33,12 +44,18 @@ class ChatHistoryRecyclerView(val navController: NavController) :
     }
 
     override fun getItemCount(): Int {
-        return 100
+        return entries.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(holder is ChatHistoryEntry){
-            holder.fillValues()
+        if (holder is ChatHistoryEntry) {
+            holder.fillValues(entries[position])
         }
+    }
+
+    fun setData(history: MutableList<MessageThread>) {
+        entries.clear()
+        entries.addAll(history)
+        notifyDataSetChanged()
     }
 }

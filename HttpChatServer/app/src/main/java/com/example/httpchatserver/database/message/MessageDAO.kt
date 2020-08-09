@@ -8,7 +8,10 @@ import androidx.room.Query
 @Dao
 interface MessageDAO {
     @Query("select * from Message where messageThreadId = :threadId")
-    fun getMessageByThread(threadId: Int): MutableList<Message>
+    fun getMessagesByThread(threadId: Int): MutableList<Message>
+
+    @Query("select * from Message where messageThreadId = :threadId order by id desc limit 1")
+    fun getLastMessageByThread(threadId: Int): Message
 
     @Insert
     fun insertMessage(message: Message): Long

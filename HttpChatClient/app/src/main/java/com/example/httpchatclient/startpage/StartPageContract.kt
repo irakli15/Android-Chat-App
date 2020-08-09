@@ -9,10 +9,10 @@ interface StartPageContract {
     }
 
     interface Model {
-        fun getUser(userName: String, onUserLoad: (user: User) -> Any)
+        fun getUser(userName: String, onUserLoad: (User) -> Any)
     }
 
     interface Presenter {
-        fun loadUser(userName: String, onUserLoad: (user: User) -> Any)
+        fun loadUser(userName: String, onUserLoad: (User) -> Any)
     }
 }

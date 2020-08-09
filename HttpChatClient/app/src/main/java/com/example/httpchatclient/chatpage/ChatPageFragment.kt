@@ -32,6 +32,7 @@ class ChatPageFragment : Fragment() {
         val supportActionBar = (activity as AppCompatActivity).supportActionBar
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        view.chat_toolbar.title = "title"
         view.chat_toolbar.setNavigationOnClickListener{
             (activity as AppCompatActivity).onBackPressed()
         }

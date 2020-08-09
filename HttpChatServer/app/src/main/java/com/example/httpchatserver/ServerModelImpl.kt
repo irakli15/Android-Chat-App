@@ -5,12 +5,14 @@ import androidx.room.Room
 import com.example.httpchatserver.database.MessagesDatabase
 import com.example.httpchatserver.database.message.Message
 import com.example.httpchatserver.database.messagethread.MessageThread
+import com.example.httpchatserver.database.messagethread.MessageThreadDTO
 import com.example.httpchatserver.database.user.User
 
 class ServerModelImpl(context: Context) : ServerContract.Model {
-    var database: MessagesDatabase = Room.databaseBuilder(context, MessagesDatabase::class.java, "messages.db")
-        .fallbackToDestructiveMigration()
-        .build()
+    var database: MessagesDatabase =
+        Room.databaseBuilder(context, MessagesDatabase::class.java, "messages.db")
+            .fallbackToDestructiveMigration()
+            .build()
 
     override fun getUserById(userId: Int): User {
         return database.getUserDAO().getUserById(userId)
@@ -32,8 +34,28 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
         return database.getUserDAO().deleteUser(user)
     }
 
-    override fun getMessageThreadByUser(userId: Int): MutableList<MessageThread> {
+    override fun getMessageThreadsByUser(userId: Int): MutableList<MessageThread> {
         return database.getMessageThreadDAO().getMessageThreadByUser(userId)
+    }
+
+    override fun getMessageThreadDTOsByUser(userId: Int): MutableList<MessageThreadDTO> {
+        val messageThread = database.getMessageThreadDAO().getMessageThreadByUser(userId)
+        return messageThread.map {
+            messageThreadToDTO(it)
+        }.toMutableList()
+    }
+
+    private fun messageThreadToDTO(messageThread: MessageThread): MessageThreadDTO {
+        val participant1 = getUserById(messageThread.participantId1)
+        val participant2 = getUserById(messageThread.participantId2)
+
+        val lastMessage = getLastMessageByThread(messageThread.id)
+        return MessageThreadDTO(
+            messageThread.id,
+            participant1,
+            participant2,
+            lastMessage
+        )
     }
 
     override fun insertMessageThread(messageThread: MessageThread): Long {
@@ -46,7 +68,7 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
     }
 
     override fun getMessageByThread(threadId: Int): MutableList<Message> {
-        return database.getMessageDAO().getMessageByThread(threadId)
+        return database.getMessageDAO().getMessagesByThread(threadId)
     }
 
     override fun insertMessage(message: Message): Long {
@@ -57,8 +79,12 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
         database.getMessageDAO().deleteMessage(message)
     }
 
-    override fun deleteMessageByThreadId(threadId: Int){
+    override fun deleteMessageByThreadId(threadId: Int) {
         database.getMessageDAO().deleteMessagesByThreadId(threadId)
+    }
+
+    override fun getLastMessageByThread(threadId: Int): Message {
+        return database.getMessageDAO().getLastMessageByThread(threadId)
     }
 
 
