@@ -21,4 +21,7 @@ interface MessageDAO {
 
     @Query("delete from Message where messageThreadId = :threadId")
     fun deleteMessagesByThreadId(threadId: Int)
+
+    @Query("select count(*) from Message where messageThreadId = :threadId and messageText like :query")
+    fun searchMessages(threadId: Int, query: String) : Long
 }

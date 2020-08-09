@@ -14,11 +14,23 @@ interface ChatHistoryPageContract {
             user: User,
             onMessageThreadsLoad: (MutableList<MessageThread>) -> Any
         )
+
+        fun searchMessageThreads(
+            user: User,
+            query: String,
+            onMessageThreadsLoad: (MutableList<MessageThread>) -> Any
+        )
     }
 
     interface Presenter {
         fun loadAllMessageThreadsByUser(
             user: User,
+            onMessageThreadsLoad: (MutableList<MessageThread>) -> Any
+        )
+
+        fun searchMessageThreads(
+            user: User,
+            query: String,
             onMessageThreadsLoad: (MutableList<MessageThread>) -> Any
         )
     }

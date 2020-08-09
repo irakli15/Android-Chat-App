@@ -15,8 +15,10 @@ interface ServerContract {
 
         fun getMessageThreadsByUser(userId: Int): MutableList<MessageThread>
         fun getMessageThreadDTOsByUser(userId: Int): MutableList<MessageThreadDTO>
+        fun searchMessageThreadDTOs(userId: Int, query: String): MutableList<MessageThreadDTO>
 
-        fun insertMessageThread(messageThread: MessageThread): Long
+
+            fun insertMessageThread(messageThread: MessageThread): Long
         fun deleteMessageThread(messageThread: MessageThread)
 
         fun getMessageByThread(threadId: Int): MutableList<Message>
@@ -24,5 +26,6 @@ interface ServerContract {
         fun deleteMessage(message: Message)
         fun deleteMessageByThreadId(threadId: Int)
         fun getLastMessageByThread(threadId: Int): Message
+        fun searchMessages(threadId: Int, query: String): Long
     }
 }

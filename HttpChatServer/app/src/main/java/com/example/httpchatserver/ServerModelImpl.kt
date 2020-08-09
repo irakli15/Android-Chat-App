@@ -7,6 +7,7 @@ import com.example.httpchatserver.database.message.Message
 import com.example.httpchatserver.database.messagethread.MessageThread
 import com.example.httpchatserver.database.messagethread.MessageThreadDTO
 import com.example.httpchatserver.database.user.User
+import java.util.*
 
 class ServerModelImpl(context: Context) : ServerContract.Model {
     var database: MessagesDatabase =
@@ -39,9 +40,36 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
     }
 
     override fun getMessageThreadDTOsByUser(userId: Int): MutableList<MessageThreadDTO> {
-        val messageThread = database.getMessageThreadDAO().getMessageThreadByUser(userId)
-        return messageThread.map {
+        val messageThreads = getMessageThreadsByUser(userId)
+        return messageThreads.map {
             messageThreadToDTO(it)
+        }.toMutableList()
+    }
+
+    override fun searchMessageThreadDTOs(
+        userId: Int,
+        query: String
+    ): MutableList<MessageThreadDTO> {
+        val messageThreads = getMessageThreadsByUser(userId)
+
+        val result = messageThreads.filter {
+            searchMessages(it.id, query) > 0L
+        }.map {
+            messageThreadToDTO(it)
+        }.toMutableList()
+
+        if (!query.isEmpty()) {
+            result.addAll(getNewMessageThreads(userId))
+        }
+        return result
+    }
+
+    private fun getNewMessageThreads(userId: Int): MutableList<MessageThreadDTO> {
+        val currentUser = getUserById(userId)
+        return getAllUsers().filter {
+            it.id != userId
+        }.map {
+            MessageThreadDTO(0, currentUser, it, Message(0, "Start Messaging", Date(), 0))
         }.toMutableList()
     }
 
@@ -85,6 +113,10 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
 
     override fun getLastMessageByThread(threadId: Int): Message {
         return database.getMessageDAO().getLastMessageByThread(threadId)
+    }
+
+    override fun searchMessages(threadId: Int, query: String): Long {
+        return database.getMessageDAO().searchMessages(threadId, "%${query}%")
     }
 
 

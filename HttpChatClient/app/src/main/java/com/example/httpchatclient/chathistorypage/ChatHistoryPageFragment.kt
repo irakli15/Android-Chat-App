@@ -3,6 +3,8 @@ package com.example.httpchatclient.chathistorypage
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +19,9 @@ import com.example.httpchatserver.database.messagethread.MessageThread
 import com.example.httpchatserver.database.user.User
 import kotlinx.android.synthetic.main.fragment_chat_history_page.*
 import kotlinx.android.synthetic.main.fragment_chat_history_page.view.*
+import kotlinx.android.synthetic.main.searchbar.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class ChatHistoryPageFragment() : Fragment(), ChatHistoryPageContract.View {
@@ -40,6 +45,21 @@ class ChatHistoryPageFragment() : Fragment(), ChatHistoryPageContract.View {
             adapter = viewAdapter
         }
         presenter.loadAllMessageThreadsByUser(user, onMessageThreadsLoad)
+
+        view.searchbarField.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                GlobalScope.launch {
+                    presenter.searchMessageThreads(user, p0.toString(), onMessageThreadsLoad)
+                }
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+        })
         return view
     }
 

@@ -3,7 +3,6 @@ package com.example.httpchatserver
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.example.httpchatserver.database.messagethread.MessageThreadDTO
 import com.example.httpchatserver.database.user.User
 import com.google.gson.Gson
 import com.sun.net.httpserver.HttpExchange
@@ -55,8 +54,9 @@ class Server : Service() {
             // Handle /messages endpoint
             mHttpServer!!.createContext("/messages", messageHandler)
 
-            mHttpServer!!.createContext("/getuser", getUserHandler)
+            mHttpServer!!.createContext("/getUser", getUserHandler)
             mHttpServer!!.createContext("/getMessageThreadsByUser", getMessageThreadsByUser)
+            mHttpServer!!.createContext("/searchMessageThreads", searchMessageThreads)
 
             mHttpServer!!.start()//startServer server;
 //            server_status.text = "server is running on port: {$port}"
@@ -147,6 +147,38 @@ class Server : Service() {
                 }
             }
         }
+    }
+
+    private val searchMessageThreads = HttpHandler { httpExchange ->
+        when (httpExchange!!.requestMethod) {
+            "POST" -> {
+                val jsonString = streamToString(httpExchange.requestBody)
+                val user = Gson().fromJson(jsonString, User::class.java)
+                var query = queryToMap(httpExchange.requestURI.query).get("query")
+
+                GlobalScope.launch {
+                    val messageThreads =
+                        model.searchMessageThreadDTOs(user.id, if (query == null) "" else query)
+                    sendResponse(
+                        httpExchange,
+                        Gson().toJson(messageThreads)
+                    )
+                }
+            }
+        }
+    }
+
+    fun queryToMap(query: String): Map<String, String> {
+        val result: MutableMap<String, String> = HashMap()
+        for (param in query.split("&".toRegex()).toTypedArray()) {
+            val entry = param.split("=".toRegex()).toTypedArray()
+            if (entry.size > 1) {
+                result[entry[0]] = entry[1]
+            } else {
+                result[entry[0]] = ""
+            }
+        }
+        return result
     }
 
     override fun onBind(p0: Intent?): IBinder? {

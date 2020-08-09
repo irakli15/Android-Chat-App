@@ -12,4 +12,13 @@ class ChatHistoryPagePresenter : ChatHistoryPageContract.Presenter {
     ) {
         model.getAllMessageThreadsByUser(user, onMessageThreadsLoad)
     }
+
+
+    override fun searchMessageThreads(
+        user: User,
+        query: String,
+        onMessageThreadsLoad: (MutableList<MessageThread>) -> Any
+    ) {
+        model.searchMessageThreads(user, query, onMessageThreadsLoad)
+    }
 }

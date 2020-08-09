@@ -28,4 +28,24 @@ class ChatHistoryPageModelImpl : ChatHistoryPageContract.Model {
                 }
             })
     }
+
+    override fun searchMessageThreads(
+        user: User,
+        query: String,
+        onMessageThreadsLoad: (MutableList<MessageThread>) -> Any
+    ) {
+        restClient.searchMessageThreads(user, query).enqueue(
+            object : retrofit2.Callback<MutableList<MessageThread>> {
+                override fun onFailure(call: Call<MutableList<MessageThread>>, t: Throwable) {
+                    Log.d("failedResponse", t.message.toString())
+                }
+
+                override fun onResponse(
+                    call: Call<MutableList<MessageThread>>,
+                    response: Response<MutableList<MessageThread>>
+                ) {
+                    response.body()?.let { onMessageThreadsLoad(it) }
+                }
+            })
+    }
 }
