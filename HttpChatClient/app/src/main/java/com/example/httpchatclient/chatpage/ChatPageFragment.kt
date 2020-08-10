@@ -13,8 +13,8 @@ import com.example.httpchatserver.database.message.Message
 import com.example.httpchatserver.database.messagethread.MessageThread
 import com.example.httpchatserver.database.user.User
 import kotlinx.android.synthetic.main.chat_toolbar_and_recyclerview.view.*
-import kotlinx.android.synthetic.main.fragment_chat_page.view.*
 import kotlinx.android.synthetic.main.message_compose_layout.view.*
+import kotlinx.android.synthetic.main.chat_toolbar_and_recyclerview.view.chatRecyclerView as chatRecyclerView1
 
 class ChatPageFragment : Fragment() {
 
@@ -36,7 +36,7 @@ class ChatPageFragment : Fragment() {
         viewManager.reverseLayout = true
         viewAdapter = ChatRecyclerView(presenter)
 
-        recyclerView = view.chatRecyclerView
+        recyclerView = view.chatRecyclerView1
         recyclerView.apply {
             layoutManager = viewManager
             adapter = viewAdapter
@@ -66,8 +66,7 @@ class ChatPageFragment : Fragment() {
 
     private val onMessagesLoad: (MutableList<Message>) -> Any = {
         viewAdapter.notifyDataSetChanged()
-        recyclerView.smoothScrollToPosition(0)
-
+        recyclerView.scrollToPosition(0)
     }
 
     private val onMessageSend: (Message) -> Any = {
