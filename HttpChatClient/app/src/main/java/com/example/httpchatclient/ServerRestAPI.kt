@@ -5,14 +5,10 @@ import com.example.httpchatserver.database.messagethread.MessageThread
 import com.example.httpchatserver.database.user.User
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ServerRestAPI {
-    @GET("messages")
-    fun getMessages(): Call<Message>
-
     @POST("getUser")
     fun getUser(@Body user: User): Call<User>
 
@@ -22,5 +18,12 @@ interface ServerRestAPI {
     @POST("searchMessageThreads")
     fun searchMessageThreads(@Body user: User, @Query("query") query: String): Call<MutableList<MessageThread>>
 
+    @POST("getMessagesByThread")
+    fun getMessagesByThread(@Query("threadId") threadId: Int): Call<MutableList<Message>>
 
+    @POST("saveMessage")
+    fun saveMessage(@Body message: Message): Call<Message>
+
+    @POST("getMessageThreadById")
+    fun getMessageThreadById(@Query("threadId")threadId: Int): Call<MessageThread>
 }

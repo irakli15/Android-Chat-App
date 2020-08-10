@@ -16,4 +16,6 @@ interface MessageThreadDAO {
 
     @Delete
     fun deleteMessageThread(messageThread: MessageThread)
+    @Query("select * from MessageThread where id = :threadId")
+    fun getMessageThreadById(threadId: String): MessageThread
 }

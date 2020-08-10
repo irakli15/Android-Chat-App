@@ -64,12 +64,23 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
         return result
     }
 
+    override fun getMessageThreadDTOById(threadId: String): MessageThreadDTO {
+        return messageThreadToDTO(database.getMessageThreadDAO().getMessageThreadById(threadId))
+    }
+
     private fun getNewMessageThreads(userId: Int): MutableList<MessageThreadDTO> {
         val currentUser = getUserById(userId)
+        val messageThreads = getMessageThreadsByUser(userId)
+        val userIdSet = hashSetOf<Int>()
+        messageThreads.forEach {
+            userIdSet.add(it.participantId1)
+            userIdSet.add(it.participantId2)
+        }
+
         return getAllUsers().filter {
-            it.id != userId
+            !userIdSet.contains(it.id) && it.id != userId
         }.map {
-            MessageThreadDTO(0, currentUser, it, Message(0, "Start Messaging", Date(), 0))
+            MessageThreadDTO(0, currentUser, it, Message(0, "Start Messaging", Date(), 0, 0, 0))
         }.toMutableList()
     }
 
@@ -95,12 +106,15 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
         return database.getMessageThreadDAO().deleteMessageThread(messageThread)
     }
 
-    override fun getMessageByThread(threadId: Int): MutableList<Message> {
+    override fun getMessagesByThread(threadId: Int): MutableList<Message> {
         return database.getMessageDAO().getMessagesByThread(threadId)
     }
 
-    override fun insertMessage(message: Message): Long {
-        return database.getMessageDAO().insertMessage(message)
+    override fun insertMessage(message: Message): Message {
+        if (message.messageThreadId == 0) {
+            message.messageThreadId = insertMessageThread(MessageThread(0, message.senderId, message.receiverId)).toInt()
+        }
+        return getMessageById(database.getMessageDAO().insertMessage(message).toInt())
     }
 
     override fun deleteMessage(message: Message) {
@@ -113,6 +127,10 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
 
     override fun getLastMessageByThread(threadId: Int): Message {
         return database.getMessageDAO().getLastMessageByThread(threadId)
+    }
+
+    override fun getMessageById(id: Int): Message {
+        return database.getMessageDAO().getMessageById(id)
     }
 
     override fun searchMessages(threadId: Int, query: String): Long {

@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ChatHistoryPageFragment">
 
+    <TextView
+        android:id="@+id/noMessagesText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/you_have_no_chat_history"
+        android:textColor="#ffa4a3a3"
+        android:textSize="25sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/include2" />
+
     <include
         android:id="@+id/include2"
         layout="@layout/fragment_chat_history_toolbar"

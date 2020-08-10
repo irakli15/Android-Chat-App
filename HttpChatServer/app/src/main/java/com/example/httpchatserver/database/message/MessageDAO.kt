@@ -7,7 +7,7 @@ import androidx.room.Query
 
 @Dao
 interface MessageDAO {
-    @Query("select * from Message where messageThreadId = :threadId")
+    @Query("select * from Message where messageThreadId = :threadId order by id desc")
     fun getMessagesByThread(threadId: Int): MutableList<Message>
 
     @Query("select * from Message where messageThreadId = :threadId order by id desc limit 1")
@@ -23,5 +23,8 @@ interface MessageDAO {
     fun deleteMessagesByThreadId(threadId: Int)
 
     @Query("select count(*) from Message where messageThreadId = :threadId and messageText like :query")
-    fun searchMessages(threadId: Int, query: String) : Long
+    fun searchMessages(threadId: Int, query: String): Long
+
+    @Query("select * from Message where id = :id")
+    fun getMessageById(id: Int): Message
 }

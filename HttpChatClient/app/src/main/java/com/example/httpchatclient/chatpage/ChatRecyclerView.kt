@@ -6,12 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.httpchatclient.R
 import com.example.httpchatserver.database.message.Message
-import com.example.httpchatserver.database.messagethread.MessageThread
-import com.example.httpchatserver.database.user.User
 import kotlinx.android.synthetic.main.chat_received.view.*
 import kotlinx.android.synthetic.main.chat_sent.view.*
 
-class ChatRecyclerView(private val currentUser: User, private val messageThread: MessageThread) :
+class ChatRecyclerView(private val presenter: ChatPagePresenterImpl) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class SentMessage(private var view: View) : RecyclerView.ViewHolder(view) {
@@ -28,7 +26,6 @@ class ChatRecyclerView(private val currentUser: User, private val messageThread:
         }
     }
 
-    private val entries: MutableList<Message> = mutableListOf()
     private val typeValues = MessageType.values()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -53,24 +50,22 @@ class ChatRecyclerView(private val currentUser: User, private val messageThread:
     }
 
     override fun getItemCount(): Int {
-        return entries.size
+        return presenter.getEntries().size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is SentMessage) {
-            holder.fillValues(entries[position])
+            holder.fillValues(presenter.getEntries()[position])
         } else if (holder is ReceivedMessage) {
-            holder.fillValues(entries[position])
+            holder.fillValues(presenter.getEntries()[position])
         }
     }
 
     override fun getItemViewType(position: Int): Int =
-        if (entries[position].senderId == currentUser.id) MessageType.SENDER.ordinal else MessageType.RECEIVER.ordinal
+        if (presenter.getEntries()[position].senderId == presenter.getCurrentUser().id) MessageType.SENDER.ordinal else MessageType.RECEIVER.ordinal
 
 
     fun setData(chatEntries: MutableList<Message>) {
-        entries.clear()
-        entries.addAll(chatEntries)
         notifyDataSetChanged()
     }
 

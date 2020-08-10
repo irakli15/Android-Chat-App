@@ -17,11 +17,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.httpchatclient.R
 import com.example.httpchatserver.database.messagethread.MessageThread
 import com.example.httpchatserver.database.user.User
+import kotlinx.android.synthetic.main.fragment_chat_history_page.*
 import kotlinx.android.synthetic.main.fragment_chat_history_page.view.*
-import kotlinx.android.synthetic.main.fragment_chat_history_toolbar.*
 import kotlinx.android.synthetic.main.searchbar.view.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 
 class ChatHistoryPageFragment() : Fragment(), ChatHistoryPageContract.View {
@@ -48,9 +46,7 @@ class ChatHistoryPageFragment() : Fragment(), ChatHistoryPageContract.View {
 
         view.searchbarField.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                GlobalScope.launch {
-                    presenter.searchMessageThreads(user, p0.toString(), onMessageThreadsLoad)
-                }
+                presenter.searchMessageThreads(user, p0.toString(), onMessageThreadsLoad)
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

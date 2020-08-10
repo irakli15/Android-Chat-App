@@ -3,6 +3,7 @@ package com.example.httpchatserver
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.example.httpchatserver.database.message.Message
 import com.example.httpchatserver.database.user.User
 import com.google.gson.Gson
 import com.sun.net.httpserver.HttpExchange
@@ -57,6 +58,9 @@ class Server : Service() {
             mHttpServer!!.createContext("/getUser", getUserHandler)
             mHttpServer!!.createContext("/getMessageThreadsByUser", getMessageThreadsByUser)
             mHttpServer!!.createContext("/searchMessageThreads", searchMessageThreads)
+            mHttpServer!!.createContext("/getMessagesByThread", getMessagesByThread)
+            mHttpServer!!.createContext("/saveMessage", saveMessage)
+            mHttpServer!!.createContext("/getMessageThreadById", getMessageThreadById)
 
             mHttpServer!!.start()//startServer server;
 //            server_status.text = "server is running on port: {$port}"
@@ -162,6 +166,56 @@ class Server : Service() {
                     sendResponse(
                         httpExchange,
                         Gson().toJson(messageThreads)
+                    )
+                }
+            }
+        }
+    }
+
+    private val getMessagesByThread = HttpHandler { httpExchange ->
+        when (httpExchange!!.requestMethod) {
+            "POST" -> {
+                val threadId = queryToMap(httpExchange.requestURI.query).get("threadId")
+
+                GlobalScope.launch {
+                    val messageThreads =
+                        threadId?.toInt()?.let { model.getMessagesByThread(it) }
+                    sendResponse(
+                        httpExchange,
+                        Gson().toJson(messageThreads)
+                    )
+                }
+            }
+        }
+    }
+
+    private val saveMessage = HttpHandler { httpExchange ->
+        when (httpExchange!!.requestMethod) {
+            "POST" -> {
+                val jsonString = streamToString(httpExchange.requestBody)
+                val message = Gson().fromJson(jsonString, Message::class.java)
+
+                GlobalScope.launch {
+                    sendResponse(
+                        httpExchange,
+                        Gson().toJson(model.insertMessage(message))
+                    )
+                }
+            }
+        }
+    }
+
+    private val getMessageThreadById = HttpHandler { httpExchange ->
+        when (httpExchange!!.requestMethod) {
+            "POST" -> {
+                val threadId = queryToMap(httpExchange.requestURI.query).get("threadId")
+
+                GlobalScope.launch {
+                    val messageThread =
+                        threadId?.toInt()?.let { model.getMessageThreadDTOById(threadId) }
+                    sendResponse(
+                        httpExchange,
+                        Gson().toJson(messageThread)
                     )
                 }
             }
