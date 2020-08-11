@@ -14,7 +14,7 @@ import com.example.httpchatserver.database.messagethread.MessageThread
 import com.example.httpchatserver.database.user.User
 import kotlinx.android.synthetic.main.chat_toolbar_and_recyclerview.view.*
 import kotlinx.android.synthetic.main.message_compose_layout.view.*
-import kotlinx.android.synthetic.main.chat_toolbar_and_recyclerview.view.chatRecyclerView as chatRecyclerView1
+import java.util.*
 
 class ChatPageFragment : Fragment() {
 
@@ -23,6 +23,7 @@ class ChatPageFragment : Fragment() {
     private lateinit var presenter: ChatPagePresenterImpl
     private lateinit var viewAdapter: ChatRecyclerView
     private lateinit var recyclerView: RecyclerView
+    private val timer = Timer(true)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,8 +36,8 @@ class ChatPageFragment : Fragment() {
         val viewManager = LinearLayoutManager(context)
         viewManager.reverseLayout = true
         viewAdapter = ChatRecyclerView(presenter)
-
-        recyclerView = view.chatRecyclerView1
+        view.appbar.setExpanded(false)
+        recyclerView = view.chatRecyclerView
         recyclerView.apply {
             layoutManager = viewManager
             adapter = viewAdapter
@@ -61,12 +62,24 @@ class ChatPageFragment : Fragment() {
             presenter.sendMessage(view.composeMessageField.text.toString(), onMessageSend)
             view.composeMessageField.text.clear()
         }
+
+
+        timer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                presenter.loadAllMessagesByThread(messageThread.id, onMessagesLoad)
+            }
+        }, 0, 2000)
+        recyclerView.scrollToPosition(0)
         return view
+    }
+
+    override fun onStop() {
+        super.onStop()
+        timer.cancel()
     }
 
     private val onMessagesLoad: (MutableList<Message>) -> Any = {
         viewAdapter.notifyDataSetChanged()
-        recyclerView.scrollToPosition(0)
     }
 
     private val onMessageSend: (Message) -> Any = {

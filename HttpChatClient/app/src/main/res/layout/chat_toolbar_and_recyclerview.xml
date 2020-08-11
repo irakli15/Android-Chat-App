@@ -26,6 +26,7 @@
             app:expandedTitleMarginBottom="51dp"
             app:expandedTitleMarginTop="85dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlways|snap"
+            app:expanded="false"
             app:toolbarId="@id/chat_toolbar">
 
             <androidx.appcompat.widget.Toolbar
@@ -57,13 +58,12 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chatRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:layout_above="@+id/compose"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/compose"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

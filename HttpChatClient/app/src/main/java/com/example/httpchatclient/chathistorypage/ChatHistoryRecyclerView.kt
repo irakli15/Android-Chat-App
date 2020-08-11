@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.httpchatclient.DateUtils
 import com.example.httpchatclient.R
 import com.example.httpchatserver.database.messagethread.MessageThread
 import com.example.httpchatserver.database.user.User
@@ -31,7 +32,7 @@ class ChatHistoryRecyclerView(
                 args.putParcelable("messageThread", messageThread)
                 navController.navigate(R.id.action_chatHistoryFragment_to_chatPageFragment, args)
             })
-            view.historyDateTimeField.text = if(messageThread.id == 0) "" else messageThread.lastMessage.sendTime.toString()
+            view.historyDateTimeField.text = if(messageThread.id == 0) "" else DateUtils.getDateText(messageThread.lastMessage.sendTime)
         }
     }
 

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.httpchatclient.DateUtils
 import com.example.httpchatclient.R
 import com.example.httpchatserver.database.message.Message
 import kotlinx.android.synthetic.main.chat_received.view.*
@@ -15,14 +16,14 @@ class ChatRecyclerView(private val presenter: ChatPagePresenterImpl) :
     class SentMessage(private var view: View) : RecyclerView.ViewHolder(view) {
         fun fillValues(message: Message) {
             view.sentChatText.text = message.messageText
-            view.sentChatTime.text = message.sendTime.toString()
+            view.sentChatTime.text = DateUtils.getDateText(message.sendTime)
         }
     }
 
     class ReceivedMessage(private var view: View) : RecyclerView.ViewHolder(view) {
         fun fillValues(message: Message) {
             view.receivedChatText.text = message.messageText
-            view.receivedChatTime.text = message.sendTime.toString()
+            view.receivedChatTime.text = DateUtils.getDateText(message.sendTime)
         }
     }
 
