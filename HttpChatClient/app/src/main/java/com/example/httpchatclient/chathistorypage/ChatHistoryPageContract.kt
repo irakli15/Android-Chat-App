@@ -20,6 +20,8 @@ interface ChatHistoryPageContract {
             query: String,
             onMessageThreadsLoad: (MutableList<MessageThread>) -> Any
         )
+
+        fun deleteMessageThread(messageThread: MessageThread)
     }
 
     interface Presenter {
@@ -33,5 +35,8 @@ interface ChatHistoryPageContract {
             query: String,
             onMessageThreadsLoad: (MutableList<MessageThread>) -> Any
         )
+
+        fun deleteMessageThread(messageThread: MessageThread)
+
     }
 }

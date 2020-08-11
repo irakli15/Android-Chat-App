@@ -102,9 +102,9 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
         return database.getMessageThreadDAO().insertMessageThread(messageThread)
     }
 
-    override fun deleteMessageThread(messageThread: MessageThread) {
-        deleteMessageByThreadId(messageThread.id)
-        return database.getMessageThreadDAO().deleteMessageThread(messageThread)
+    override fun deleteMessageThread(threadId: Int) {
+        deleteMessageByThreadId(threadId)
+        return database.getMessageThreadDAO().deleteMessageThread(threadId)
     }
 
     override fun getMessagesByThread(threadId: Int): MutableList<Message> {
@@ -150,6 +150,8 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
     override fun searchMessages(threadId: Int, query: String): Long {
         return database.getMessageDAO().searchMessages(threadId, "%${query}%")
     }
+
+
 
 
 }

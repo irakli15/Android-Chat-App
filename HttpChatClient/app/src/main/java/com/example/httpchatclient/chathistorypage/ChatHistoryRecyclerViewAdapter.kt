@@ -12,7 +12,7 @@ import com.example.httpchatserver.database.messagethread.MessageThread
 import com.example.httpchatserver.database.user.User
 import kotlinx.android.synthetic.main.chat_history_entry.view.*
 
-class ChatHistoryRecyclerView(
+class ChatHistoryRecyclerViewAdapter(
     private val navController: NavController,
     private val currentUser: User
 ) :
@@ -36,7 +36,7 @@ class ChatHistoryRecyclerView(
         }
     }
 
-    private val entries: MutableList<MessageThread> = mutableListOf()
+    val entries: MutableList<MessageThread> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ChatHistoryEntry(
@@ -61,6 +61,11 @@ class ChatHistoryRecyclerView(
     fun setData(history: MutableList<MessageThread>) {
         entries.clear()
         entries.addAll(history)
+        notifyDataSetChanged()
+    }
+
+    fun remove(swipedPosition: Int) {
+        entries.removeAt(swipedPosition)
         notifyDataSetChanged()
     }
 }

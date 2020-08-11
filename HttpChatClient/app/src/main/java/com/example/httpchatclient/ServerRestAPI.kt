@@ -5,6 +5,7 @@ import com.example.httpchatserver.database.messagethread.MessageThread
 import com.example.httpchatserver.database.user.User
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -35,4 +36,7 @@ interface ServerRestAPI {
 
     @POST("getMessageThreadById")
     fun getMessageThreadById(@Query("threadId")threadId: Int): Call<MessageThread>
+
+    @DELETE("deleteMessageThread")
+    fun deleteMessageThread(@Query("threadId") threadId: Int): Call<Any>
 }

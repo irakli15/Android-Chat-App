@@ -63,6 +63,7 @@ class Server : Service() {
             mHttpServer!!.createContext("/saveMessage", saveMessage)
             mHttpServer!!.createContext("/getMessageThreadById", getMessageThreadById)
             mHttpServer!!.createContext("/getLatestMessagesByThread", getLatestMessagesByThread)
+            mHttpServer!!.createContext("/deleteMessageThread", deleteMessageThread)
 
             mHttpServer!!.start()//startServer server;
 //            server_status.text = "server is running on port: {$port}"
@@ -261,6 +262,24 @@ class Server : Service() {
                     sendResponse(
                         httpExchange,
                         Gson().toJson(messageThread)
+                    )
+                }
+            }
+        }
+    }
+
+    private val deleteMessageThread = HttpHandler { httpExchange ->
+        when (httpExchange!!.requestMethod) {
+            "DELETE" -> {
+                val jsonString = streamToString(httpExchange.requestBody)
+                val threadId = queryToMap(httpExchange.requestURI.query).get("threadId")?.toInt()
+
+                GlobalScope.launch {
+                    val messageThreads =
+                        threadId?.let { model.deleteMessageThread(threadId) }
+                    sendResponse(
+                        httpExchange,
+                        Gson().toJson(messageThreads)
                     )
                 }
             }

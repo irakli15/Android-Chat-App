@@ -14,8 +14,9 @@ interface MessageThreadDAO {
     @Insert
     fun insertMessageThread(messageThread: MessageThread) : Long
 
-    @Delete
-    fun deleteMessageThread(messageThread: MessageThread)
+    @Query("delete from MessageThread where id = :threadId")
+    fun deleteMessageThread(threadId: Int)
+
     @Query("select * from MessageThread where id = :threadId")
     fun getMessageThreadById(threadId: String): MessageThread
 }

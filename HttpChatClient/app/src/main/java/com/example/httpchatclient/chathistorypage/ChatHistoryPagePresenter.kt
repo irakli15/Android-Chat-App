@@ -21,4 +21,8 @@ class ChatHistoryPagePresenter : ChatHistoryPageContract.Presenter {
     ) {
         model.searchMessageThreads(user, query, onMessageThreadsLoad)
     }
+
+    override fun deleteMessageThread(messageThread: MessageThread) {
+        model.deleteMessageThread(messageThread)
+    }
 }

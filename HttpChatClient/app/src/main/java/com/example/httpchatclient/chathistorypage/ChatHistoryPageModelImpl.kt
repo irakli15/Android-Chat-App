@@ -48,4 +48,19 @@ class ChatHistoryPageModelImpl : ChatHistoryPageContract.Model {
                 }
             })
     }
+
+    override fun deleteMessageThread(messageThread: MessageThread) {
+        restClient.deleteMessageThread(messageThread.id).enqueue(
+            object : retrofit2.Callback<Any> {
+                override fun onFailure(call: Call<Any>, t: Throwable) {
+                    Log.d("failedResponse", t.message.toString())
+                }
+
+                override fun onResponse(
+                    call: Call<Any>,
+                    response: Response<Any>
+                ) {
+                }
+            })
+    }
 }

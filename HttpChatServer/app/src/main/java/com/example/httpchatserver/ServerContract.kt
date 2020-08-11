@@ -19,10 +19,15 @@ interface ServerContract {
         fun getMessageThreadDTOById(threadId: String): MessageThreadDTO
 
         fun insertMessageThread(messageThread: MessageThread): Long
-        fun deleteMessageThread(messageThread: MessageThread)
+        fun deleteMessageThread(threadId: Int)
 
         fun getMessagesByThread(threadId: Int): MutableList<Message>
-        fun getPagedMessagesByThread(threadId: Int, currentId: Int, pagingSize: Int): MutableList<Message>
+        fun getPagedMessagesByThread(
+            threadId: Int,
+            currentId: Int,
+            pagingSize: Int
+        ): MutableList<Message>
+
         fun getLatestMessagesByThread(threadId: Int, currentId: Int): MutableList<Message>
         fun insertMessage(message: Message): Message
         fun deleteMessage(message: Message)

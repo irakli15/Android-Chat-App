@@ -27,9 +27,9 @@ class ChatPagePresenterImpl(
                 0,
                 messageText,
                 Date(),
-                messageThread.id,
+                model.messageThread.id,
                 currentUser.id,
-                if (messageThread.participant1.id == currentUser.id) messageThread.participant2.id else messageThread.participant1.id
+                if (model.messageThread.participant1.id == currentUser.id) model.messageThread.participant2.id else model.messageThread.participant1.id
             ),
             onMessageSendPresenter,
             onMessageSend
@@ -42,7 +42,7 @@ class ChatPagePresenterImpl(
 
     private val onMessageSendPresenter: (Message, () -> Any) -> Any =
         { message: Message, onMessageSend: () -> Any ->
-            if (messageThread.id == 0 && message.messageThreadId != 0) {
+            if (model.messageThread.id == 0 && message.messageThreadId != 0) {
                 model.getMessageThreadById(message, onMessageSend)
             } else {
                 onMessageSend()
