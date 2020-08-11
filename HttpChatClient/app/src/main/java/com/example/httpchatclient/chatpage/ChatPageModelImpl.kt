@@ -14,12 +14,10 @@ class ChatPageModelImpl(
 ) : ChatPageContract.Model {
     private var restClient = ServerAPIClient.getInstance()
     val entries = mutableListOf<Message>()
-
-    override fun getAllMessagesByThread(
-        threadId: Int,
-        onMessagesLoad: (MutableList<Message>) -> Any
-    ) {
-        restClient.getMessagesByThread(threadId).enqueue(
+    private val PAGING_SIZE = 5
+    private var loadingData = false
+    override fun getAllMessagesByThread(onMessagesLoad: () -> Any) {
+        restClient.getMessagesByThread(messageThread.id).enqueue(
             object : retrofit2.Callback<MutableList<Message>> {
                 override fun onFailure(call: Call<MutableList<Message>>, t: Throwable) {
                     Log.d("failedResponse", t.message.toString())
@@ -32,16 +30,86 @@ class ChatPageModelImpl(
                     response.body()?.let {
                         entries.clear()
                         entries.addAll(it)
-                        onMessagesLoad(it)
+                        onMessagesLoad()
                     }
+                }
+            })
+    }
+
+    override fun getPagedMessagesByThread(onMessagesLoad: () -> Any) {
+        if (loadingData) {
+            return
+        }
+        loadingData = true
+        Log.d("load", "started loading")
+        restClient.getPagedMessagesByThread(
+            messageThread.id,
+            if (entries.lastIndex > 0) entries[entries.lastIndex].id else Int.MAX_VALUE,
+            PAGING_SIZE
+        ).enqueue(
+            object : retrofit2.Callback<MutableList<Message>> {
+                override fun onFailure(call: Call<MutableList<Message>>, t: Throwable) {
+                    Log.d("failedResponse", t.message.toString())
+                    loadingData = false
+                }
+
+                override fun onResponse(
+                    call: Call<MutableList<Message>>,
+                    response: Response<MutableList<Message>>
+                ) {
+                    response.body()?.let {
+                        it.forEach {
+                            if (!entries.contains(it)) {
+                                entries.add(entries.size, it)
+                            }
+                        }
+                        loadingData = false
+                        onMessagesLoad()
+                    }
+                }
+            })
+    }
+
+    override fun getLatestMessagesByThread(onMessagesLoad: () -> Any) {
+        if (loadingData) {
+            return
+        }
+        loadingData = true
+        Log.d("load", "started loading")
+        restClient.getLatestMessagesByThread(
+            messageThread.id,
+            if (entries.size > 0) entries[0].id else 0
+        ).enqueue(
+            object : retrofit2.Callback<MutableList<Message>> {
+                override fun onFailure(call: Call<MutableList<Message>>, t: Throwable) {
+                    Log.d("failedResponse", t.message.toString())
+                    loadingData = false
+                }
+
+                override fun onResponse(
+                    call: Call<MutableList<Message>>,
+                    response: Response<MutableList<Message>>
+                ) {
+                    response.body()?.let {
+                        it.sortBy {
+                            it.id
+                        }
+                        it.forEach {
+                            if (!entries.contains(it)) {
+                                entries.add(0, it)
+                            }
+                        }
+                    }
+                    loadingData = false
+                    onMessagesLoad()
                 }
             })
     }
 
     override fun saveMessage(
         message: Message,
-        onMessageSendPresenter: (Message, (Message) -> Any) -> Any,
-        onMessageSend: (Message) -> Any
+        onMessageSendPresenter: (Message, () -> Any) -> Any,
+        onMessageSend: () -> Any
     ) {
         restClient.saveMessage(message).enqueue(
             object : retrofit2.Callback<Message> {
@@ -63,7 +131,7 @@ class ChatPageModelImpl(
 
     override fun getMessageThreadById(
         message: Message,
-        onMessageSend: (Message) -> Any
+        onMessageSend: () -> Any
     ) {
         restClient.getMessageThreadById(message.messageThreadId).enqueue(
             object : retrofit2.Callback<MessageThread> {
@@ -77,7 +145,7 @@ class ChatPageModelImpl(
                 ) {
                     response.body()?.let {
                         messageThread = it
-                        onMessageSend(message)
+                        onMessageSend()
                     }
                 }
             })

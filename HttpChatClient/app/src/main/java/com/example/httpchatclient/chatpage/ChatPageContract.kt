@@ -4,31 +4,39 @@ import com.example.httpchatserver.database.message.Message
 
 interface ChatPageContract {
     interface View {
-
+        fun showChatLoading()
+        fun hideChatLoading()
     }
 
     interface Model {
 
-        fun getAllMessagesByThread(
-            threadId: Int,
-            onMessagesLoad: (MutableList<Message>) -> Any
-        )
+        fun getAllMessagesByThread(onMessagesLoad: () -> Any)
+
+        fun getPagedMessagesByThread(onMessagesLoad: () -> Any)
+
+        fun getLatestMessagesByThread(onMessagesLoad: () -> Any)
+
 
         fun saveMessage(
             message: Message,
-            onMessageSendPresenter: (Message, (Message) -> Any) -> Any,
-            onMessageSend: (Message) -> Any
+            onMessageSendPresenter: (Message, () -> Any) -> Any,
+            onMessageSend: () -> Any
         )
 
         fun getMessageThreadById(
             message: Message,
-            onMessageSend: (Message) -> Any
+            onMessageSend: () -> Any
         )
+
+
+
     }
 
     interface Presenter {
-        fun loadAllMessagesByThread(threadId: Int, onMessagesLoad: (MutableList<Message>) -> Any)
-        fun sendMessage(messageText: String, onMessageSent: (Message) -> Any)
+        fun loadAllMessagesByThread(onMessagesLoad: () -> Any)
+        fun getPagedMessagesByThread(onMessagesLoad: () -> Any)
+        fun sendMessage(messageText: String, onMessageSent: () -> Any)
+        fun getLatestMessagesByThread(onMessagesLoad: () -> Any)
 
     }
 }

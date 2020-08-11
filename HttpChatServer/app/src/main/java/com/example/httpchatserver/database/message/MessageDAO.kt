@@ -7,8 +7,14 @@ import androidx.room.Query
 
 @Dao
 interface MessageDAO {
-    @Query("select * from Message where messageThreadId = :threadId order by id desc")
+    @Query("select * from Message where messageThreadId = :threadId order by id")
     fun getMessagesByThread(threadId: Int): MutableList<Message>
+
+    @Query("select * from Message where messageThreadId = :threadId and id < :currentId order by id desc limit :pagingSize")
+    fun getPagedMessagesByThread(threadId: Int, currentId: Int, pagingSize: Int): MutableList<Message>
+
+    @Query("select * from Message where messageThreadId = :threadId and id > :currentId order by id")
+    fun getLatestMessagesByThread(threadId: Int, currentId: Int): MutableList<Message>
 
     @Query("select * from Message where messageThreadId = :threadId order by id desc limit 1")
     fun getLastMessageByThread(threadId: Int): Message

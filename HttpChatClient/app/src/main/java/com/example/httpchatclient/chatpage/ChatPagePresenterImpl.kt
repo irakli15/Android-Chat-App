@@ -12,13 +12,16 @@ class ChatPagePresenterImpl(
     private val model = ChatPageModelImpl(currentUser, messageThread)
 
     override fun loadAllMessagesByThread(
-        threadId: Int,
-        onMessagesLoad: (MutableList<Message>) -> Any
+        onMessagesLoad: () -> Any
     ) {
-        model.getAllMessagesByThread(threadId, onMessagesLoad)
+        model.getAllMessagesByThread(onMessagesLoad)
     }
 
-    override fun sendMessage(messageText: String, onMessageSend: (Message) -> Any) {
+    override fun getPagedMessagesByThread(onMessagesLoad: () -> Any) {
+        model.getPagedMessagesByThread(onMessagesLoad)
+    }
+
+    override fun sendMessage(messageText: String, onMessageSend: () -> Any) {
         model.saveMessage(
             Message(
                 0,
@@ -33,12 +36,16 @@ class ChatPagePresenterImpl(
         )
     }
 
-    private val onMessageSendPresenter: (Message, (Message) -> Any) -> Any =
-        { message: Message, onMessageSend: (Message) -> Any ->
+    override fun getLatestMessagesByThread(onMessagesLoad: () -> Any) {
+        model.getLatestMessagesByThread(onMessagesLoad)
+    }
+
+    private val onMessageSendPresenter: (Message, () -> Any) -> Any =
+        { message: Message, onMessageSend: () -> Any ->
             if (messageThread.id == 0 && message.messageThreadId != 0) {
                 model.getMessageThreadById(message, onMessageSend)
             } else {
-                onMessageSend(message)
+                onMessageSend()
             }
         }
 

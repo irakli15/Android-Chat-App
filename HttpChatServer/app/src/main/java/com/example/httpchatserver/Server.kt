@@ -59,8 +59,10 @@ class Server : Service() {
             mHttpServer!!.createContext("/getMessageThreadsByUser", getMessageThreadsByUser)
             mHttpServer!!.createContext("/searchMessageThreads", searchMessageThreads)
             mHttpServer!!.createContext("/getMessagesByThread", getMessagesByThread)
+            mHttpServer!!.createContext("/getPagedMessagesByThread", getPagedMessagesByThread)
             mHttpServer!!.createContext("/saveMessage", saveMessage)
             mHttpServer!!.createContext("/getMessageThreadById", getMessageThreadById)
+            mHttpServer!!.createContext("/getLatestMessagesByThread", getLatestMessagesByThread)
 
             mHttpServer!!.start()//startServer server;
 //            server_status.text = "server is running on port: {$port}"
@@ -184,6 +186,49 @@ class Server : Service() {
                         httpExchange,
                         Gson().toJson(messageThreads)
                     )
+                }
+            }
+        }
+    }
+
+    private val getPagedMessagesByThread = HttpHandler { httpExchange ->
+        when (httpExchange!!.requestMethod) {
+            "POST" -> {
+                val parameters = queryToMap(httpExchange.requestURI.query)
+                val threadId = parameters.get("threadId")?.toInt()
+                val currentId = parameters.get("currentId")?.toInt()
+                val pagingSize = parameters.get("pagingSize")?.toInt()
+
+                GlobalScope.launch {
+                    if (threadId != null && currentId != null && pagingSize != null) {
+                        val messages =
+                            model.getPagedMessagesByThread(threadId, currentId, pagingSize)
+                        sendResponse(
+                            httpExchange,
+                            Gson().toJson(messages)
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private val getLatestMessagesByThread = HttpHandler { httpExchange ->
+        when (httpExchange!!.requestMethod) {
+            "POST" -> {
+                val parameters = queryToMap(httpExchange.requestURI.query)
+                val threadId = parameters.get("threadId")?.toInt()
+                val currentId = parameters.get("currentId")?.toInt()
+
+                GlobalScope.launch {
+                    if (threadId != null && currentId != null) {
+                        val messages =
+                            model.getLatestMessagesByThread(threadId, currentId)
+                        sendResponse(
+                            httpExchange,
+                            Gson().toJson(messages)
+                        )
+                    }
                 }
             }
         }

@@ -43,7 +43,8 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
         val messageThreads = getMessageThreadsByUser(userId)
         return messageThreads.map {
             messageThreadToDTO(it)
-        }.toMutableList()
+        }.sortedByDescending { messageThreadDTO -> messageThreadDTO.lastMessage.sendTime }
+            .toMutableList()
     }
 
     override fun searchMessageThreadDTOs(
@@ -110,9 +111,22 @@ class ServerModelImpl(context: Context) : ServerContract.Model {
         return database.getMessageDAO().getMessagesByThread(threadId)
     }
 
+    override fun getPagedMessagesByThread(
+        threadId: Int,
+        currentId: Int,
+        pagingSize: Int
+    ): MutableList<Message> {
+        return database.getMessageDAO().getPagedMessagesByThread(threadId, currentId, pagingSize)
+    }
+
+    override fun getLatestMessagesByThread(threadId: Int, currentId: Int): MutableList<Message> {
+        return database.getMessageDAO().getLatestMessagesByThread(threadId, currentId)
+    }
+
     override fun insertMessage(message: Message): Message {
         if (message.messageThreadId == 0) {
-            message.messageThreadId = insertMessageThread(MessageThread(0, message.senderId, message.receiverId)).toInt()
+            message.messageThreadId =
+                insertMessageThread(MessageThread(0, message.senderId, message.receiverId)).toInt()
         }
         return getMessageById(database.getMessageDAO().insertMessage(message).toInt())
     }

@@ -21,6 +21,15 @@ interface ServerRestAPI {
     @POST("getMessagesByThread")
     fun getMessagesByThread(@Query("threadId") threadId: Int): Call<MutableList<Message>>
 
+    @POST("getPagedMessagesByThread")
+    fun getPagedMessagesByThread(@Query("threadId") threadId: Int, @Query("currentId") currentId: Int, @Query("pagingSize") pagingSize: Int): Call<MutableList<Message>>
+
+    @POST("getLatestMessagesByThread")
+    fun getLatestMessagesByThread(@Query("threadId") threadId: Int, @Query("currentId") currentId: Int): Call<MutableList<Message>>
+
+    @POST("getMessageCountByThread")
+    fun getMessageCountByThread(@Query("threadId") threadId: Int): Call<Int>
+
     @POST("saveMessage")
     fun saveMessage(@Body message: Message): Call<Message>
 

@@ -22,6 +22,8 @@ interface ServerContract {
         fun deleteMessageThread(messageThread: MessageThread)
 
         fun getMessagesByThread(threadId: Int): MutableList<Message>
+        fun getPagedMessagesByThread(threadId: Int, currentId: Int, pagingSize: Int): MutableList<Message>
+        fun getLatestMessagesByThread(threadId: Int, currentId: Int): MutableList<Message>
         fun insertMessage(message: Message): Message
         fun deleteMessage(message: Message)
         fun deleteMessageByThreadId(threadId: Int)

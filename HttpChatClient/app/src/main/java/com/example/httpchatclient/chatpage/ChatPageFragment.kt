@@ -9,14 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.httpchatclient.R
-import com.example.httpchatserver.database.message.Message
 import com.example.httpchatserver.database.messagethread.MessageThread
 import com.example.httpchatserver.database.user.User
 import kotlinx.android.synthetic.main.chat_toolbar_and_recyclerview.view.*
 import kotlinx.android.synthetic.main.message_compose_layout.view.*
 import java.util.*
 
-class ChatPageFragment : Fragment() {
+class ChatPageFragment : Fragment(), ChatPageContract.View {
 
     private lateinit var currentUser: User
     private lateinit var messageThread: MessageThread
@@ -29,7 +28,6 @@ class ChatPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_chat_page, container, false)
-
         currentUser = arguments?.getParcelable("currentUser")!!
         messageThread = arguments?.getParcelable("messageThread")!!
         presenter = ChatPagePresenterImpl(currentUser, messageThread)
@@ -42,6 +40,16 @@ class ChatPageFragment : Fragment() {
             layoutManager = viewManager
             adapter = viewAdapter
         }
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(-1)) {
+                    showChatLoading()
+                    presenter.getPagedMessagesByThread(onMessagesLoad)
+
+                }
+            }
+        })
         (activity as AppCompatActivity).setSupportActionBar(view.chat_toolbar)
         val supportActionBar = (activity as AppCompatActivity).supportActionBar
         supportActionBar!!.setDisplayShowTitleEnabled(false)
@@ -55,7 +63,7 @@ class ChatPageFragment : Fragment() {
             if (messageThread.participant1.id == currentUser.id) messageThread.participant2.userName else messageThread.participant1.userName
 
         if (messageThread.id != 0) {
-            presenter.loadAllMessagesByThread(messageThread.id, onMessagesLoad)
+            presenter.getPagedMessagesByThread(onMessagesLoad)
         }
 
         view.sendButton.setOnClickListener {
@@ -66,7 +74,7 @@ class ChatPageFragment : Fragment() {
 
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-                presenter.loadAllMessagesByThread(messageThread.id, onMessagesLoad)
+                presenter.getLatestMessagesByThread(onMessagesLoad)
             }
         }, 0, 2000)
         recyclerView.scrollToPosition(0)
@@ -78,12 +86,21 @@ class ChatPageFragment : Fragment() {
         timer.cancel()
     }
 
-    private val onMessagesLoad: (MutableList<Message>) -> Any = {
+    private val onMessagesLoad: () -> Any = {
         viewAdapter.notifyDataSetChanged()
+        hideChatLoading()
     }
 
-    private val onMessageSend: (Message) -> Any = {
+    private val onMessageSend: () -> Any = {
         viewAdapter.notifyDataSetChanged()
         recyclerView.smoothScrollToPosition(0)
+    }
+
+    override fun showChatLoading() {
+//        view?.findViewById<ProgressBar>(R.id.chatLoading)?.visibility = View.VISIBLE
+    }
+
+    override fun hideChatLoading() {
+//        view?.findViewById<ProgressBar>(R.id.chatLoading)?.visibility = View.INVISIBLE
     }
 }
