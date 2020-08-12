@@ -39,7 +39,6 @@ class ChatHistoryPageFragment() : Fragment(), ChatHistoryPageContract.View {
         val view = inflater.inflate(R.layout.fragment_chat_history_page, container, false)
         setUnfocusHandler(view)
         user = arguments?.getParcelable("user")!!
-
         var viewManager = LinearLayoutManager(context)
         viewAdapter = ChatHistoryRecyclerViewAdapter(findNavController(), user)
         recyclerView = view.chatHistoryRecyclerView
@@ -67,7 +66,7 @@ class ChatHistoryPageFragment() : Fragment(), ChatHistoryPageContract.View {
         timer = Timer(true)
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-                if(!searching) {
+                if (!searching) {
                     presenter.loadAllMessageThreadsByUser(user, onMessageThreadsLoad)
                 }
             }

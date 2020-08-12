@@ -6,14 +6,15 @@
     android:layout_marginTop="23dp">
 
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/historyUserImage"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginStart="35dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_user_male" />
+        android:src="@drawable/ic_user_male"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
 
     <TextView
         android:id="@+id/historyUserNameField"

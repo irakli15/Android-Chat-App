@@ -1,6 +1,9 @@
 package com.example.httpchatclient.chatpage
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,6 +62,12 @@ class ChatPageFragment : Fragment(), ChatPageContract.View {
             (activity as AppCompatActivity).onBackPressed()
         }
 
+        var imageString =
+            if (messageThread.participant1.id == currentUser.id) messageThread.participant2.image else messageThread.participant1.image
+        if (imageString != null && !imageString.isEmpty()) {
+            view.chat_user_icon.setImageBitmap(getBitmapFromBase64(imageString))
+        }
+
         view.chat_toolbar.title =
             if (messageThread.participant1.id == currentUser.id) messageThread.participant2.userName else messageThread.participant1.userName
 
@@ -102,5 +111,10 @@ class ChatPageFragment : Fragment(), ChatPageContract.View {
 
     override fun hideChatLoading() {
 //        view?.findViewById<ProgressBar>(R.id.chatLoading)?.visibility = View.INVISIBLE
+    }
+
+    fun getBitmapFromBase64(imageString: String): Bitmap {
+        val byteArray = Base64.decode(imageString, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
     }
 }

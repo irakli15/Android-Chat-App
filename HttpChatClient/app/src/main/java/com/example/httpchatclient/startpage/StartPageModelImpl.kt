@@ -10,8 +10,12 @@ class StartPageModelImpl : StartPageContract.Model {
 
     private var restClient = ServerAPIClient.getInstance()
 
-    override fun getUser(userName: String, onUserLoad: (user: User) -> Any) {
-        restClient.getUser(User(userName = userName)).enqueue(
+    override fun getUser(
+        userName: String,
+        imageString: String,
+        onUserLoad: (User) -> Any
+    ) {
+        restClient.getUser(User(userName = userName, image = imageString)).enqueue(
             object : retrofit2.Callback<User> {
                 override fun onFailure(call: Call<User>, t: Throwable) {
                     Log.d("failedResponse", t.message.toString())

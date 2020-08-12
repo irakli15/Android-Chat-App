@@ -62,12 +62,14 @@
 
     <TextView
         android:id="@+id/noMessagesText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:text="@string/you_have_no_chat_history"
         android:textColor="#ffa4a3a3"
         android:textSize="25sp"
+        android:gravity="center"
         android:visibility="invisible"
+        android:isScrollContainer="false"
+        
 />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,6 +1,9 @@
 package com.example.httpchatclient.chathistorypage
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +35,13 @@ class ChatHistoryRecyclerViewAdapter(
                 args.putParcelable("messageThread", messageThread)
                 navController.navigate(R.id.action_chatHistoryFragment_to_chatPageFragment, args)
             })
-            view.historyDateTimeField.text = if(messageThread.id == 0) "" else DateUtils.getDateText(messageThread.lastMessage.sendTime)
+            var imageString =
+                if (messageThread.participant1.id == currentUser.id) messageThread.participant2.image else messageThread.participant1.image
+            if (imageString != null && !imageString.isEmpty()) {
+                view.historyUserImage.setImageBitmap(getBitmapFromBase64(imageString))
+            }
+            view.historyDateTimeField.text =
+                if (messageThread.id == 0) "" else DateUtils.getDateText(messageThread.lastMessage.sendTime)
         }
     }
 
@@ -67,5 +76,10 @@ class ChatHistoryRecyclerViewAdapter(
     fun remove(swipedPosition: Int) {
         entries.removeAt(swipedPosition)
         notifyDataSetChanged()
+    }
+
+    fun getBitmapFromBase64(imageString: String): Bitmap {
+        val byteArray = Base64.decode(imageString, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
     }
 }

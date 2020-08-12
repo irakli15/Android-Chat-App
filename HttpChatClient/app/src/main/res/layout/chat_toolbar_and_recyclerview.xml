@@ -35,24 +35,20 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/chat_user_icon"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
                 android:layout_gravity="end"
                 android:layout_marginTop="88dp"
                 android:layout_marginEnd="39dp"
-                android:background="@drawable/circle"
-                app:cardCornerRadius="50dp"
+                android:src="@drawable/ic_user_male"
+                app:civ_border_width="3dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:civ_border_color="#ff67aef7"
                 app:layout_collapseMode="pin">
 
-                <ImageView
-                    android:id="@+id/chat_user_icon"
-                    android:layout_width="54dp"
-                    android:layout_height="54dp"
-                    android:cropToPadding="true"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/cropped" />
-            </androidx.cardview.widget.CardView>
+            </de.hdodenhof.circleimageview.CircleImageView>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
